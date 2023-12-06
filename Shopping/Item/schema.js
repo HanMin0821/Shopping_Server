@@ -3,10 +3,11 @@ const itemSchema = new mongoose.Schema(
     {
         name: { type: String, required: true },
         category:String,
-        manufactureDate: Date,
-        productionDate: Date,
+        productionDate: {type: String, format:Date},
+        expirationDate:  {type: String, format:Date},
         description: String,
-        price: Number
+            email:String,
+        price: String,
     },
     { collection: "items" }
 );
