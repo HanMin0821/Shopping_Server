@@ -1,6 +1,6 @@
 import model from "./model.js";
 
-export const findAllItems = () => model.find();
+export const findAllItems = () => model.find().sort({_id: -1});
 
 export const findItemById = (id) => model.findById(id);
 

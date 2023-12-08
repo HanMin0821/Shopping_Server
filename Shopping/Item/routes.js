@@ -9,22 +9,22 @@ function ItemRoutes(app) {
         const items = await dao.findAllItems();
         res.json(items);
     };
-    const findById = async (req,res) =>{
+    const findById = async (req, res) => {
         const id = req.params.id;
         const item = await dao.findItemById(id)
         res.json(item)
     }
 
-    const createItem = async (req,res) =>{
+    const createItem = async (req, res) => {
         const item = await dao.createItem(req.body);
         res.json(item);
     }
-    const deleteItem = async (req,res) =>{
+    const deleteItem = async (req, res) => {
         const id = req.params.id;
         const status = await dao.deleteItem(id);
         res.json(status);
     }
-    const updateItem = async (req,res) =>{
+    const updateItem = async (req, res) => {
         const id = req.params.id;
         const status = await dao.updateItem(id, req.body);
         res.json(status);
@@ -45,7 +45,7 @@ function ItemRoutes(app) {
     // };
     // app.post("/api/users", createUser);
     // app.get("/api/users/username/:username", findByUsername);
-    app.get("/api/shopping", findAll);
+    app.get("/api/shopping/items", findAll);
     app.get("/api/shopping/item/:id", findById);
     app.post("/api/shopping", createItem);
     app.delete("/api/shopping/:id", deleteItem);
