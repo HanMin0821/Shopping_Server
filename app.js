@@ -4,7 +4,9 @@ import cors from "cors";
 import mongoose from "mongoose";
 import session from "express-session";
 import ItemRoutes from "./Shopping/Item/routes.js";
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/Shopping';
+import UserRoutes from "./Shopping/users/routes.js";
+// import User";
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/project';
 mongoose.connect(CONNECTION_STRING);
 
 const app = express();
@@ -34,5 +36,6 @@ app.use(
 app.use(express.json());
 // app.use(cors());
 ItemRoutes(app);
+UserRoutes(app);
 
 app.listen(process.env.PORT || 4000);
