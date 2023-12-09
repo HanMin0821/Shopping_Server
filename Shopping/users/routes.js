@@ -44,9 +44,14 @@ function UserRoutes(app) {
   const signin = async (req, res) => {
     const { username, password } = req.body;
     const currentUser = await dao.findUserByCredentials(username, password);
+    if (!currentUser) {
+      // User not found or password incorrect
+      return res.status(401).json({ message: "Invalid username or password" });
+  }
     req.session['currentUser'] = currentUser;
     res.json(currentUser);
   };
+
   const signout = (req, res) => {
     req.session.destroy();
     res.json(200);
@@ -71,10 +76,19 @@ function UserRoutes(app) {
     const id = req.params.id;
     const user = await dao.findUserById(id);
     if (user) {
-      const userProfile = { username: user.username, role: user.role };
+      const userProfile = { username: user.username, role: user.role, email: user.email };
       res.json(userProfile);
     } else {
       res.status(404).send('User not found');
+    }
+  };
+  
+
+  const getCurrentUserId = (req, res) => {
+    if (req.session['currentUser']) {
+        res.json({ userId: req.session['currentUser'].id });
+    } else {
+        res.status(401).json({ message: 'Not logged in' });
     }
   };
 
@@ -90,5 +104,25 @@ function UserRoutes(app) {
   app.post("/api/users/profile", account);
   app.get("/api/profiles", findAllUsernames);
   app.get("/api/profiles/:id", findUserProfileById);
+  app.get("/api/users/current-user-id", getCurrentUserId);
+  app.get("/api/users/:userId/liked-items", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const items = await dao.findLikedItemsByUser(userId);
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+  app.get("/api/items/seller/:sellerId", async (req, res) => {
+    try {
+        const sellerId = req.params.sellerId;
+        const items = await dao.findItemsBySeller(sellerId);
+        res.json(items);
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
 }
 export default UserRoutes;

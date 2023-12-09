@@ -1,10 +1,17 @@
-import model from "./model.js";
+import Likemodel from "./model.js";
+import itemModel from "../Item/model.js";
 
-export const findAllLikes = () => model.find();
+export const findAllLikes = () => Likemodel.find();
 export const createUserLikesItem = (userId, itemId) =>
-    model.create({ user: userId, itemId: itemId });
+    Likemodel.create({ user: userId, itemId: itemId });
 export const deleteUserLikesItem = (userId, itemId) =>
-    model.deleteOne({ user: userId, itemId: itemId });
+    Likemodel.deleteOne({ user: userId, itemId: itemId });
 export const findUsersThatLikeItem = (itemId) =>
-    model.find({ itemId: itemId }).populate("user");
-export const findItemsThatUserLikes = (userId) => model.find({ user: userId });
+    Likemodel.find({ itemId: itemId }).populate("user");
+export const findItemsThatUserLikes = (userId) => Likemodel.find({ user: userId });
+export const findLikedItemsByUser = async (userId) => {
+    const likes = await Likemodel.find({ user: userId });
+    const itemIds = likes.map(like => like.itemId);
+    const items = await Promise.all(itemIds.map(itemId => itemModel.findOne({ _id: itemId })));
+    return items;
+};

@@ -27,11 +27,28 @@ function LikesRoutes(app) {
         const likes = await dao.findItemsThatUserLikes(userId);
         res.json(likes);
     };
+    // const findSellersOfItemsLikedByUser = async (req, res) => {
+    //     const userId = req.params.userId;
+    //     const sellers = await dao.findSellersOfItemsLikedByUser(userId);
+    //     res.json(sellers);
+    // };
+
+    app.get("/api/users/:userId/liked-items", async (req, res) => {
+        try {
+            const userId = req.params.userId;
+            const likedItems = await dao.findItemsThatUserLikes(userId);
+            res.json(likedItems);
+        } catch (error) {
+            res.status(500).send("Internal Server Error");
+        }
+    });    
+
     app.get("/api/shopping/items/:itemId/like", findAllLikes);
     app.post("/api/shopping/items/:itemId/like/:userId", createUserLikesItem);
     app.delete("/api/shopping/items/:itemId/like/:userId", deleteUserLikesItem);
     app.get("/api/shopping/items/like/:itemId", findUsersThatLikeItem);
     app.get("/api/shopping/items/like/:userId", findItemsThatUserLikes);
+    // app.get("/api/shopping/users/:userId/liked-items-sellers", findSellersOfItemsLikedByUser);
 }
 
 export default LikesRoutes;
