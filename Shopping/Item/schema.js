@@ -6,8 +6,9 @@ const itemSchema = new mongoose.Schema(
         productionDate: {type: String, format:Date},
         expirationDate:  {type: String, format:Date},
         description: String,
-            email:String,
         price: String,
+        seller:String,
+        seller_id:String
     },
     { collection: "items" }
 );
