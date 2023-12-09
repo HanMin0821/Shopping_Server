@@ -56,6 +56,28 @@ function UserRoutes(app) {
     res.json(req.session['currentUser']);
   };
 
+  const findAllUsernames = async (req, res) => {
+    const users = await dao.findAllUsers();
+    // Adjust here to include the role in the response
+    const userProfiles = users.map(user => ({
+        id: user._id, 
+        username: user.username, 
+        role: user.role // Include the role
+    }));
+    res.json(userProfiles);
+  };
+
+  const findUserProfileById = async (req, res) => {
+    const id = req.params.id;
+    const user = await dao.findUserById(id);
+    if (user) {
+      const userProfile = { username: user.username, role: user.role };
+      res.json(userProfile);
+    } else {
+      res.status(404).send('User not found');
+    }
+  };
+
   app.get("/api/users", findAllUsers);
   app.get("/api/users/:id", findUserById);
   app.get("/api/users/username/:username", findUserByUsername);
@@ -65,6 +87,8 @@ function UserRoutes(app) {
   app.post("/api/users/signup", signup);
   app.post("/api/users/signin", signin);
   app.post("/api/users/signout", signout);
-  app.post("/api/users/account", account);
+  app.post("/api/users/profile", account);
+  app.get("/api/profiles", findAllUsernames);
+  app.get("/api/profiles/:id", findUserProfileById);
 }
 export default UserRoutes;
