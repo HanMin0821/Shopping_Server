@@ -1,17 +1,19 @@
-// profileRoutes.js
 const express = require('express');
 const router = express.Router();
 const User = require('../users/model');
-const isAuthenticated = require('./middleware/isAuthenticated'); // An example authentication middleware
-
-// Middleware to check if the user is authenticated
-router.use('/api/profile', isAuthenticated);
+const mongoose = require('mongoose');
 
 // Get the profile of the logged-in user
-router.get('/api/profile', async (req, res) => {
+router.get('/api/profile/me', async (req, res) => {
   try {
-    const userId = req.session.userId; // Or however you're storing the logged-in user's ID
-    const user = await User.findById(userId).select('-password'); // Exclude sensitive fields like password
+    const userId = req.session.userId; // Ensure this is correctly set
+
+    // Validate the userId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).send('Invalid user ID');
+    }
+
+    const user = await User.findById(userId).select('-password'); // Exclude password field
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -19,6 +21,7 @@ router.get('/api/profile', async (req, res) => {
 
     res.json(user);
   } catch (error) {
+    console.error(error); // Log the error for debugging
     res.status(500).send('Server error');
   }
 });
@@ -27,7 +30,13 @@ router.get('/api/profile', async (req, res) => {
 router.get('/api/profile/:profileId', async (req, res) => {
   try {
     const { profileId } = req.params;
-    const user = await User.findById(profileId).select('-password'); // Exclude sensitive fields
+
+    // Validate the profileId
+    if (!mongoose.Types.ObjectId.isValid(profileId)) {
+      return res.status(400).send('Invalid profile ID');
+    }
+
+    const user = await User.findById(profileId).select('-password'); // Exclude password field
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -42,6 +51,7 @@ router.get('/api/profile/:profileId', async (req, res) => {
 
     res.json(publicProfileData);
   } catch (error) {
+    console.error(error); // Log the error for debugging
     res.status(500).send('Server error');
   }
 });
