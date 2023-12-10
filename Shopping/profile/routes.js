@@ -1,7 +1,7 @@
 // profileRoutes.js
 const express = require('express');
 const router = express.Router();
-const User = require('./User'); // Your User model
+const User = require('../users/model');
 const isAuthenticated = require('./middleware/isAuthenticated'); // An example authentication middleware
 
 // Middleware to check if the user is authenticated
