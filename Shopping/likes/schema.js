@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 const Schema = new mongoose.Schema(
     {
-        user: {type: mongoose.Schema.Types.ObjectId, ref: "users"},
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "projectusers"},
         itemId: String,
         itemTitle: String,
     },
-    {collection: "likes"}
 );
 export default Schema;

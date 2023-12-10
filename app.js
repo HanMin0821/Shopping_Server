@@ -7,7 +7,7 @@ import ItemRoutes from "./Shopping/Item/routes.js";
 import UserRoutes from "./Shopping/users/routes.js";
 import LikesRoutes from "./Shopping/likes/routes.js";
 // import User";
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/project';
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/Kanbas';
 mongoose.connect(CONNECTION_STRING);
 
 const app = express();

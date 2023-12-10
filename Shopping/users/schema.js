@@ -13,6 +13,6 @@ const userSchema = new mongoose.Schema(
       default: "BUYER",
     },
   },
-  { collection: "users" }
+  { collection: "projectusers" }
 );
 export default userSchema;
