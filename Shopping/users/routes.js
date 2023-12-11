@@ -13,11 +13,20 @@ function UserRoutes(app) {
     const users = await dao.findAllUsers();
     res.json(users);
   };
+  const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
   const findUserById = async (req, res) => {
     const id = req.params.id;
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
     const user = await dao.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(user);
   };
+
   const findUserByUsername = async (req, res) => {
     const username = req.params.username;
     const user = await dao.findUserByUsername(username);
@@ -74,13 +83,15 @@ function UserRoutes(app) {
 
   const findUserProfileById = async (req, res) => {
     const id = req.params.id;
-    const user = await dao.findUserById(id);
-    if (user) {
-      const userProfile = { username: user.username, role: user.role, email: user.email };
-      res.json(userProfile);
-    } else {
-      res.status(404).send('User not found');
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
     }
+    const user = await dao.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userProfile = { username: user.username, role: user.role, email: user.email };
+    res.json(userProfile);
   };
   
 
