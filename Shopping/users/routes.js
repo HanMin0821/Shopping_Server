@@ -70,7 +70,7 @@ function UserRoutes(app) {
   const account = async (req, res) => {
     const currentUser = await req.session['currentUser'];
     res.json(currentUser);
-    console.log("account: " + req.session['currentUser'])
+    console.log("account: " + currentUser)
   };
 
   const findAllUsernames = async (req, res) => {
