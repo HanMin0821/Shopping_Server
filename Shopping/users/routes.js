@@ -20,6 +20,7 @@ function UserRoutes(app) {
     // if (!isValidObjectId(id)) {
     //   return res.status(400).json({ message: "Invalid ID format" });
     // }
+    console.log(id);
     const user = await dao.findUserById(id);
     // if (!user) {
     //   return res.status(404).json({ message: "User not found" });
@@ -67,7 +68,9 @@ function UserRoutes(app) {
   };
 
   const account = async (req, res) => {
-    res.json(req.session['currentUser']);
+    const currentUser = await req.session['currentUser'];
+    res.json(currentUser);
+    console.log("account: " + req.session['currentUser'])
   };
 
   const findAllUsernames = async (req, res) => {

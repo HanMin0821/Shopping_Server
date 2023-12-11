@@ -3,9 +3,9 @@ import Likemodel from "../likes/model.js";
 import itemModel from "../Item/model.js";
 import mongoose from 'mongoose';
 
-export const createUser = (user) => model.create(user);
+export const createUser = (user) => model.create(user);export const findUserById = (userId) => model.findById(userId);
 export const findAllUsers = () => model.find();
-export const findUserById = (userId) => model.findById(userId);
+
 export const findUserByUsername = (username) =>
   model.findOne({ username: username });
 export const findUserByCredentials = (username, password) =>
